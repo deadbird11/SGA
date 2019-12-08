@@ -1,0 +1,9 @@
+#Folders
+.vs/
+bin/
+bin-int/
+Sandbox/
+
+#Files
+*.user
+*.sln
