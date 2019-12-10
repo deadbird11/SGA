@@ -15,45 +15,11 @@ namespace sga
 	using UintGeneList = std::vector<UintGene>;
 	using IntGeneList = std::vector<IntGene>;
 	using FloatGeneList = std::vector<FloatGene>;
-
-
+	
 	class Genotype
 	{
 		friend class Simulator;
-		friend class GenotypeLayout;
 	public:
-	private:
-
-		template<typename T>
-		void PushGene(unsigned int geneLength)
-		{
-			static_assert(false);
-		}
-
-		template<>
-		void PushGene<bool>(unsigned int geneLength)
-		{
-			m_BoolGenes.push_back(BoolGene(geneLength));
-		}
-
-		template<>
-		void PushGene<unsigned int>(unsigned int geneLength)
-		{
-			m_UintGenes.push_back(UintGene(geneLength));
-		}
-
-		template<>
-		void PushGene<int>(unsigned int geneLength)
-		{
-			m_IntGenes.push_back(IntGene(geneLength));
-		}
-
-		template<>
-		void PushGene<float>(unsigned int geneLength)
-		{
-			m_FloatGenes.push_back(FloatGene(geneLength));
-		}
-
 		template<typename T>
 		auto GetGene(unsigned int id) const -> std::vector<T>
 		{
@@ -61,13 +27,13 @@ namespace sga
 		}
 
 		template<>
-		auto GetGene<bool>(unsigned int id) const -> sga::BoolGene
+		auto GetGene<bool>(unsigned int id) const -> BoolGene
 		{
 			return m_BoolGenes[id];
 		}
 
 		template<>
-		auto GetGene<unsigned int>(unsigned int id) const -> UintGene 
+		auto GetGene<unsigned int>(unsigned int id) const -> UintGene
 		{
 			return m_UintGenes[id];
 		}
@@ -84,11 +50,15 @@ namespace sga
 			return m_FloatGenes[id];
 		}
 
-	private:
+	protected:
 
+		Genotype() = default;
+		
 		BoolGeneList m_BoolGenes;
 		UintGeneList m_UintGenes;
 		IntGeneList m_IntGenes;
 		FloatGeneList m_FloatGenes;
 	};
+
+
 }
