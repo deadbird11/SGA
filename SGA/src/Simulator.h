@@ -12,10 +12,8 @@
 namespace sga
 {	
 	
-	class Simlulator
+	class Simulator
 	{
-		friend class Genotype;
-
 	public:
 		
 		template<typename T>
@@ -27,15 +25,17 @@ namespace sga
 		template<typename T>
 		void PushGene(unsigned int geneLength)
 		{
-			m_Layout.Push<T>(count);
+			m_Layout.Push<T>(geneLength);
 		}
+
+		Simulator() {}
 
 	private:
 
 		std::vector<Genotype> m_Population;
-		Genotype& m_CurrentGenotype;
+		Genotype* m_CurrentGenotype;
 
-		GenotypeLayout& m_Layout;
+		GenotypeLayout m_Layout{};
 
 	};
 	

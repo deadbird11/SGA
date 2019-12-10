@@ -9,12 +9,11 @@ namespace sga
 
 	class GenotypeLayout
 	{
-		friend class Genotype;
 	public:
 		template<typename T>
 		void Push(unsigned int geneLength)
 		{
-			m_Blueprint.Push<T>(length);
+			m_Blueprint.PushGene<T>(geneLength);
 		}
 
 		void Construct(Genotype& other)
