@@ -114,6 +114,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Genotype.h" />
+    <ClInclude Include="src\GenotypeLayout.h" />
     <ClInclude Include="src\sga.h" />
     <ClInclude Include="src\Simulator.h" />
   </ItemGroup>

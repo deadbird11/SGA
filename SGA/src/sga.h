@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Simulator.h"
+
 #include <vector>
 
 namespace sga

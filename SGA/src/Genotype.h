@@ -9,37 +9,67 @@ namespace sga
 
 	class Genotype
 	{
-
 	public:
+	private:
 
 		template<typename T>
-		std::vector<T> GetAttrib(unsigned int index)
+		void PushGene(unsigned int geneLength)
 		{
 			static_assert(false);
 		}
 
 		template<>
-		BoolGene GetAttrib<bool>(unsigned int index)
+		void PushGene<bool>(unsigned int geneLength)
 		{
-			return m_BoolGenes[index];
+			m_BoolGenes.push_back(BoolGene(geneLength));
 		}
 
 		template<>
-		UintGene GetAttrib<unsigned int>(unsigned int index)
+		void PushGene<unsigned int>(unsigned int geneLength)
 		{
-			return m_UintGenes[index];
+			m_UintGenes.push_back(UintGene(geneLength));
 		}
 
 		template<>
-		IntGene GetAttrib<int>(unsigned int index)
+		void PushGene<int>(unsigned int geneLength)
 		{
-			return m_IntGenes[index];
+			m_IntGenes.push_back(IntGene(geneLength));
 		}
 
 		template<>
-		FloatGene GetAttrib<float>(unsigned int index)
+		void PushGene<float>(unsigned int geneLength)
 		{
-			return m_FloatGenes[index];
+			m_FloatGenes.push_back(FloatGene(geneLength));
+		}
+
+		template<typename T>
+		std::vector<T> GetGene(unsigned int id) const
+		{
+			static_assert(false);
+		}
+
+		template<>
+		BoolGene GetGene<bool>(unsigned int id) const
+		{
+			return m_BoolGenes[id];
+		}
+
+		template<>
+		UintGene GetGene<unsigned int>(unsigned int id) const
+		{
+			return m_UintGenes[id];
+		}
+
+		template<>
+		IntGene GetGene<int>(unsigned int id) const
+		{
+			return m_IntGenes[id];
+		}
+
+		template<>
+		FloatGene GetGene<float>(unsigned int id) const
+		{
+			return m_FloatGenes[id];
 		}
 
 	private:
