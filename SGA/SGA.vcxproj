@@ -115,6 +115,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\sga.h" />
+    <ClInclude Include="src\Simulator.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sga.cpp" />
