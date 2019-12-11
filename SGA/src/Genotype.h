@@ -1,8 +1,6 @@
 #pragma once
 
-#include "sga.h"
-
-#include <vector>
+#include "Types.h"
 
 namespace sga
 {

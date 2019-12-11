@@ -115,10 +115,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Genotype.h" />
-    <ClInclude Include="src\GenotypeLayout.h" />
     <ClInclude Include="src\MutableGenotype.h" />
     <ClInclude Include="src\sga.h" />
     <ClInclude Include="src\Simulation.h" />
+    <ClInclude Include="src\Types.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\sga.cpp" />

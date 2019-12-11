@@ -1,7 +1,5 @@
 #pragma once
 
-#include "sga.h"
-
 #include "Genotype.h"
 
 namespace sga
@@ -45,13 +43,11 @@ namespace sga
 	
 		MutableGenotype(GenotypeBlueprint blueprint)
 		{
-			m_BoolGenes = BoolGeneList(blueprint.BoolGeneCount);
-			m_UintGenes = UintGeneList(blueprint.UintGeneCount);
-			m_IntGenes = IntGeneList(blueprint.IntGeneCount);
-			m_FloatGenes = FloatGeneList(blueprint.FloatGeneCount);
+			m_BoolGenes		= BoolGeneList(blueprint.BoolGeneCount);
+			m_UintGenes		= UintGeneList(blueprint.UintGeneCount);
+			m_IntGenes		= IntGeneList(blueprint.IntGeneCount);
+			m_FloatGenes	= FloatGeneList(blueprint.FloatGeneCount);
 		}
-
-		friend MutableGenotype GenotypeLayout::Construct();
 
 		MutableGenotype(Genotype other)
 			: Genotype(other)

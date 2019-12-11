@@ -8,12 +8,13 @@
 
 namespace sga
 {
+
 	void Simulation::GeneratePopulation()
 	{
 		m_Population = std::vector<Genotype>{};
 		for (unsigned int i = 0; i < m_PopulationSize; ++i)
 		{
-			MutableGenotype newGenotype = m_Layout.Construct();
+			MutableGenotype newGenotype = Construct();
 			m_RandomGenFunc(newGenotype);
 			// Population consists of const Genotypes
 			MutableGenotype test = MutableGenotype(newGenotype.GetConstGenotype());
@@ -21,8 +22,8 @@ namespace sga
 		}
 	}
 
-	Simulation::Simulation(unsigned int popSize, GenotypeLayout layout, RandomGenFunc randomGenFunc)
-		: m_PopulationSize(popSize), m_Layout(layout), m_RandomGenFunc(randomGenFunc)
+	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
+		: m_PopulationSize(popSize), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
 	{
 		// TODO: must move this to Run 
 		GeneratePopulation();
@@ -52,14 +53,19 @@ namespace sga
 		m_RandomGenFunc = func;
 	}
 
-	Simulation::Simulation(unsigned int popSize, GenotypeLayout layout,
+	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
 		FitnessFunc fitnessFunc, MutationFunc mutationFunc,
 		CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc)
-		: m_PopulationSize(popSize),      m_Layout(layout),
+		: m_PopulationSize(popSize),      m_Blueprint(blueprint),
 		  m_FitnessFunc(fitnessFunc),     m_MutationFunc(mutationFunc),
 		  m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
 	{
 		// TODO: move this to Run
 		GeneratePopulation();
+	}
+
+	MutableGenotype Simulation::Construct()
+	{
+		return MutableGenotype(m_Blueprint);
 	}
 }

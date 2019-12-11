@@ -1,9 +1,6 @@
 #pragma once
 
-#include "sga.h"
-
 #include "Genotype.h"
-#include "GenotypeLayout.h"
 #include "MutableGenotype.h"
 
 #include <vector>
@@ -13,30 +10,32 @@ namespace sga
 {	
 	using FitnessFunc = std::function<float(const Genotype&)>;
 	using MutationFunc = std::function<Genotype(Genotype)>;
-	using CrossoverFunc = std::function<Genotype(const Genotype&, const Genotype&)>;
+	using CrossoverFunc = std::function<Genotype(const Genotype&, const Genotype&, MutableGenotype&)>;
 	using RandomGenFunc = std::function<void(MutableGenotype&)>;
-	
+
 	class Simulation
 	{
 		friend class GenotypeLayout;
 	public:
 
-		Simulation(unsigned int popSize, GenotypeLayout layout,
+		Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
 			FitnessFunc fitnessFunc, MutationFunc mutationFunc,
 			CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc);
 
 		// for debugging
-		Simulation(unsigned int popSize, GenotypeLayout layout, RandomGenFunc randomGenFunc);
+		Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc);
 
 		// Setters
 		void SetFitnessFunc(FitnessFunc func);
 		void SetMutationFunc(MutationFunc func);
 		void SetCrossoverFunc(CrossoverFunc func);
 		void SetRandomGenFunc(RandomGenFunc func);
-		void SetLayout(GenotypeLayout layout);
+		void SetLayout(GenotypeBlueprint blueprint);
 		void SetPopulationSize(unsigned int n);
 
 	private:
+
+		MutableGenotype Construct();
 
 		void GeneratePopulation();
 
@@ -44,7 +43,7 @@ namespace sga
 		unsigned int m_PopulationSize;
 		std::vector<Genotype> m_Population;
 		Genotype* m_CurrentGenotype = nullptr;
-		GenotypeLayout m_Layout;
+		GenotypeBlueprint m_Blueprint;
 
 		FitnessFunc m_FitnessFunc;
 		MutationFunc m_MutationFunc;
