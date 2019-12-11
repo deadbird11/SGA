@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Simulator.h"
+#include "Simulation.h"
 
 #include <vector>
 

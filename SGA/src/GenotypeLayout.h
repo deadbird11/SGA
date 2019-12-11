@@ -2,7 +2,6 @@
 
 #include "sga.h"
 
-#include "Genotype.h"
 #include "MutableGenotype.h"
 
 namespace sga
@@ -10,7 +9,7 @@ namespace sga
 
 	class GenotypeLayout
 	{
-		friend class Simulator;
+		friend class Simulation;
 	public:
 		template<typename T>
 		void PushGene()

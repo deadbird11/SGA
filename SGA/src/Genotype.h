@@ -18,7 +18,6 @@ namespace sga
 	
 	class Genotype
 	{
-		friend class Simulator;
 	public:
 		template<typename T>
 		auto GetGene(unsigned int id) const -> std::vector<T>
@@ -59,6 +58,5 @@ namespace sga
 		IntGeneList m_IntGenes;
 		FloatGeneList m_FloatGenes;
 	};
-
 
 }

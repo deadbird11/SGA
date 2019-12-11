@@ -23,10 +23,12 @@ workspace "SGA"
         filter "configurations:Debug"
             defines {"DEBUG"}
             symbols "on"
+            runtime "MTd"
         
         filter "configurations:Release"
             defines {"NDEBUG"}
             optimize "on"
+            runtime "MT"
 
     project "Sandbox"
         kind "ConsoleApp"
