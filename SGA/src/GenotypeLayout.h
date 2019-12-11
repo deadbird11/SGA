@@ -11,6 +11,11 @@ namespace sga
 	{
 		friend class Simulation;
 	public:
+
+		GenotypeLayout(GenotypeBlueprint blueprint)
+			: m_Blueprint(blueprint)
+		{}
+
 		template<typename T>
 		void PushGene()
 		{
@@ -20,38 +25,34 @@ namespace sga
 		template<>
 		void PushGene<bool>()
 		{
-			++m_BoolGeneCount;
+			++m_Blueprint.BoolGeneCount;
 		}
 
 		template<>
 		void PushGene<unsigned int>()
 		{
-			++m_UintGeneCount;
+			++m_Blueprint.UintGeneCount;
 		}
 
 		template<>
 		void PushGene<int>()
 		{
-			++m_IntGeneCount;
+			++m_Blueprint.IntGeneCount;
 		}
 
 		template<>
 		void PushGene<float>()
 		{
-			++m_FloatGeneCount;
+			++m_Blueprint.FloatGeneCount;
 		}
 
 	private:
 
 		MutableGenotype Construct()
 		{
-			return MutableGenotype(m_BoolGeneCount, m_UintGeneCount, 
-								   m_IntGeneCount, m_FloatGeneCount);
+			return MutableGenotype(m_Blueprint);
 		}
 
-		unsigned int m_BoolGeneCount = 0;
-		unsigned int m_UintGeneCount = 0;
-		unsigned int m_IntGeneCount = 0;
-		unsigned int m_FloatGeneCount = 0;
+		GenotypeBlueprint m_Blueprint;
 	};
 }

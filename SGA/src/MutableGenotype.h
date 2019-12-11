@@ -9,7 +9,6 @@ namespace sga
 
 	class MutableGenotype : public Genotype
 	{
-		friend class GenotypeLayout;
 		friend class Simulation;
 	public:
 		template<typename T>
@@ -44,14 +43,15 @@ namespace sga
 
 	private:
 	
-		MutableGenotype(unsigned int boolGeneCount, unsigned int uintGeneCount,
-						unsigned int intGeneCount,  unsigned int floatGeneCount)
+		MutableGenotype(GenotypeBlueprint blueprint)
 		{
-			m_BoolGenes = BoolGeneList(boolGeneCount);
-			m_UintGenes = UintGeneList(uintGeneCount);
-			m_IntGenes = IntGeneList(intGeneCount);
-			m_FloatGenes = FloatGeneList(floatGeneCount);
+			m_BoolGenes = BoolGeneList(blueprint.BoolGeneCount);
+			m_UintGenes = UintGeneList(blueprint.UintGeneCount);
+			m_IntGenes = IntGeneList(blueprint.IntGeneCount);
+			m_FloatGenes = FloatGeneList(blueprint.FloatGeneCount);
 		}
+
+		friend MutableGenotype GenotypeLayout::Construct();
 
 		MutableGenotype(Genotype other)
 			: Genotype(other)

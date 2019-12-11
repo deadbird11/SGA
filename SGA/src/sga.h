@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Simulation.h"
+#include "GenotypeLayout.h"
 
 #include <vector>
 
@@ -13,6 +14,12 @@ using FloatGene = std::vector<float>;
 
 namespace sga
 {
-	
+	struct GenotypeBlueprint
+	{
+		unsigned int BoolGeneCount = 0;
+		unsigned int UintGeneCount = 0;
+		unsigned int IntGeneCount = 0;
+		unsigned int FloatGeneCount = 0;
+	};
 
 }
