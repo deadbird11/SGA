@@ -30,7 +30,7 @@ namespace sga
 		void SetMutationFunc(MutationFunc func);
 		void SetCrossoverFunc(CrossoverFunc func);
 		void SetRandomGenFunc(RandomGenFunc func);
-		void SetLayout(GenotypeBlueprint blueprint);
+		void SetBlueprint(GenotypeBlueprint blueprint);
 		void SetPopulationSize(unsigned int n);
 
 	private:

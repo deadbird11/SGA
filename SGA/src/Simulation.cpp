@@ -52,7 +52,7 @@ namespace sga
 		m_RandomGenFunc = func;
 	}
 
-	void Simulation::SetLayout(GenotypeBlueprint blueprint)
+	void Simulation::SetBlueprint(GenotypeBlueprint blueprint)
 	{
 		ASSERT_NOT_RUNNING;
 		m_Blueprint = blueprint;
