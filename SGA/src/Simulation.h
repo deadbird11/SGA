@@ -16,9 +16,7 @@ namespace sga
 
 	class Simulation
 	{
-		friend class GenotypeLayout;
 	public:
-
 		Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
 			FitnessFunc fitnessFunc, MutationFunc mutationFunc,
 			CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc);
