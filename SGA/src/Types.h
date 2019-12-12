@@ -16,4 +16,5 @@ namespace sga
 		unsigned int IntGeneCount = 0;
 		unsigned int FloatGeneCount = 0;
 	};
+
 }

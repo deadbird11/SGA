@@ -56,6 +56,7 @@ namespace sga
 
 		Genotype GetConstGenotype()
 		{
+			// Using object slicing on purpose to return a const version of this object
 			return (Genotype)(*this);
 		}
 	};

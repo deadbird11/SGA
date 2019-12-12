@@ -53,6 +53,18 @@ namespace sga
 		m_RandomGenFunc = func;
 	}
 
+	void Simulation::SetLayout(GenotypeBlueprint blueprint)
+	{
+		ASSERT_NOT_RUNNING;
+		m_Blueprint = blueprint;
+	}
+
+	void Simulation::SetPopulationSize(unsigned int n)
+	{
+		ASSERT_NOT_RUNNING;
+		m_PopulationSize = n;
+	}
+
 	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
 		FitnessFunc fitnessFunc, MutationFunc mutationFunc,
 		CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc)
@@ -68,4 +80,5 @@ namespace sga
 	{
 		return MutableGenotype(m_Blueprint);
 	}
+
 }

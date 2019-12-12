@@ -8,8 +8,9 @@
 
 namespace sga
 {	
+
 	using FitnessFunc = std::function<float(const Genotype&)>;
-	using MutationFunc = std::function<Genotype(Genotype)>;
+	using MutationFunc = std::function<void(MutableGenotype&)>;
 	using CrossoverFunc = std::function<Genotype(const Genotype&, const Genotype&, MutableGenotype&)>;
 	using RandomGenFunc = std::function<void(MutableGenotype&)>;
 
@@ -50,9 +51,9 @@ namespace sga
 		CrossoverFunc m_CrossoverFunc;
 		RandomGenFunc m_RandomGenFunc;
 
+		// To disable Setters
 		bool m_Running = false;
-	};
-	
-	
+
+	};	
 
 }
