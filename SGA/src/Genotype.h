@@ -12,7 +12,7 @@ namespace sga
 		template<typename T>
 		auto GetGene(unsigned int id) const -> std::vector<T>
 		{
-			static_assert(false);
+			static_assert(false, "SGA does not support this type.");
 		}
 
 		template<>

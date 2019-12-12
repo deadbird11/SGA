@@ -4,7 +4,7 @@
 
 #include <cassert>
 
-#define ASSERT_NOT_RUNNING assert(!m_Running && "Cannot change FitnessFunc while Simulation is running.")
+#define ASSERT_NOT_RUNNING assert(!m_Running && "Cannot change this value while Simulation is running.")
 
 namespace sga
 {

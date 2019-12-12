@@ -16,6 +16,7 @@ namespace sga
 
 	class Simulation
 	{
+
 	public:
 		Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
 			FitnessFunc fitnessFunc, MutationFunc mutationFunc,
