@@ -14,18 +14,17 @@ namespace sga
 		m_Population = std::vector<Genotype>{};
 		for (unsigned int i = 0; i < m_PopulationSize; ++i)
 		{
-			MutableGenotype newGenotype = Construct();
-			m_RandomGenFunc(newGenotype);
+			MutableGenotype blank = Construct();
+			m_RandomGenFunc(blank);
 			// Population consists of const Genotypes
-			MutableGenotype test = MutableGenotype(newGenotype.GetConstGenotype());
-			m_Population.push_back(newGenotype.GetConstGenotype());
+			m_Population.push_back(blank.GetConstGenotype());
 		}
 	}
 
 	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
 		: m_PopulationSize(popSize), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
 	{
-		// TODO: must move this to Run 
+		// TODO: move this to Run 
 		GeneratePopulation();
 	}
 
