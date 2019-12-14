@@ -11,7 +11,7 @@ namespace sga
 
 	using FitnessFunc = std::function<float(const Genotype&)>;
 	using MutationFunc = std::function<void(MutableGenotype&)>;
-	using CrossoverFunc = std::function<Genotype(const Genotype&, const Genotype&, MutableGenotype&)>;
+	using CrossoverFunc = std::function<void(const Genotype&, const Genotype&, MutableGenotype&)>;
 	using RandomGenFunc = std::function<void(MutableGenotype&)>;
 
 	class Simulation
