@@ -6,14 +6,13 @@ namespace sga
 {
 	namespace detail
 	{
-
+		// I want to expand on this eventually
 		class Random
 		{
 		public:
-			static float GetRandomInRange(float a, float b);
-
 		private:
 			static std::default_random_engine s_Engine;
+			static float GetRandomInRange(float a, float b);
 		};
 	}
 }
