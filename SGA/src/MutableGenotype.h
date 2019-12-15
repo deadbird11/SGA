@@ -9,6 +9,7 @@ namespace sga
 	{
 		friend class Simulation;
 	public:
+		// Setters, for user use in RandomGenFunc, CrossoverFunc, and MutationFunc
 		template<typename T>
 		void SetGene(unsigned int id, std::vector<T> value)
 		{
@@ -41,24 +42,11 @@ namespace sga
 
 	private:
 	
-		MutableGenotype(GenotypeBlueprint blueprint)
-		{
-			m_BoolGenes		= BoolGeneList(blueprint.BoolGeneCount);
-			m_UintGenes		= UintGeneList(blueprint.UintGeneCount);
-			m_IntGenes		= IntGeneList(blueprint.IntGeneCount);
-			m_FloatGenes	= FloatGeneList(blueprint.FloatGeneCount);
-		}
+		MutableGenotype(GenotypeBlueprint blueprint);
 
-		MutableGenotype(Genotype other)
-			: Genotype(other)
-		{
-		}
+		MutableGenotype(Genotype other);
 
-		Genotype GetConstGenotype()
-		{
-			// Using object slicing on purpose to return a const version of this object
-			return (Genotype)(*this);
-		}
+		Genotype GetConstGenotype();
 	};
 
 }
