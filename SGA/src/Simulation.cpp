@@ -3,11 +3,92 @@
 #include "MutableGenotype.h"
 
 #include <cassert>
+#include <iostream>
+#include <algorithm>
 
 #define ASSERT_NOT_RUNNING assert(!m_Running && "Cannot change this value while Simulation is running.")
+#define MAX_GENERATION 5
+
 
 namespace sga
 {
+
+	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
+		: m_PopulationSize(popSize), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
+	{
+		// TODO: move this to Run 
+		GeneratePopulation();
+	}
+
+	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc,
+						   FitnessFunc fitnessFunc)
+		: m_PopulationSize(popSize), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc), m_FitnessFunc(fitnessFunc)
+	{
+		// TODO: move this to Run 
+		GeneratePopulation();
+	}
+
+	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
+		FitnessFunc fitnessFunc, MutationFunc mutationFunc,
+		CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc)
+		: m_PopulationSize(popSize), m_Blueprint(blueprint),
+		m_FitnessFunc(fitnessFunc), m_MutationFunc(mutationFunc),
+		m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
+	{
+		// TODO: move this to Run
+		GeneratePopulation();
+	}
+
+	void Simulation::Run()
+	{
+		m_Running = true;
+
+		// TODO: add acceptance criteria
+		for (unsigned int generation = 0; generation < MAX_GENERATION; ++generation)
+		{
+			// calculating fitness
+			auto fitnesses = CalcPopulationFitness();
+		}
+	}
+
+	std::vector<float> Simulation::CalcPopulationFitness()
+	{
+		std::vector<float> result{};
+		// keeping track to normalize fitnesses
+		float min;
+		float max = 0;
+		// using this to output current best Genotype
+		unsigned int bestIndex;
+
+		for (unsigned int i = 0; i < m_PopulationSize; ++i)
+		{
+			// User defined FitnessFunc
+			float fitness = m_FitnessFunc(m_Population[i]);
+			result.push_back(fitness);
+
+			if (i == 0 || fitness < min)
+				min = fitness;
+			else if (fitness > max)
+			{
+				max = fitness;
+				bestIndex = i;
+			}
+		}
+
+		// output best gene
+		std::cout << "Best Genotype of this generation:" << std::endl;
+		std::cout << m_Population[bestIndex].ToString() << std::endl;
+
+		// normalizing values between 0 and 1
+		std::for_each(std::begin(result), std::end(result),
+			[min, max](float& val)
+		{
+			val = (val - min) / (max - min);
+		});
+
+		return result;
+	}
+
 
 	void Simulation::GeneratePopulation()
 	{
@@ -19,60 +100,6 @@ namespace sga
 			// Population consists of const Genotypes
 			m_Population.push_back(blank.GetConstGenotype());
 		}
-	}
-
-	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
-		: m_PopulationSize(popSize), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
-	{
-		// TODO: move this to Run 
-		GeneratePopulation();
-	}
-
-	void Simulation::SetFitnessFunc(FitnessFunc func)
-	{
-		ASSERT_NOT_RUNNING;
-		m_FitnessFunc = func;
-	}
-
-	void Simulation::SetMutationFunc(MutationFunc func)
-	{
-		ASSERT_NOT_RUNNING;
-		m_MutationFunc = func;
-	}
-
-	void Simulation::SetCrossoverFunc(CrossoverFunc func)
-	{
-		ASSERT_NOT_RUNNING;
-		m_CrossoverFunc = func;
-	}
-
-	void Simulation::SetRandomGenFunc(RandomGenFunc func)
-	{
-		ASSERT_NOT_RUNNING;
-		m_RandomGenFunc = func;
-	}
-
-	void Simulation::SetBlueprint(GenotypeBlueprint blueprint)
-	{
-		ASSERT_NOT_RUNNING;
-		m_Blueprint = blueprint;
-	}
-
-	void Simulation::SetPopulationSize(unsigned int n)
-	{
-		ASSERT_NOT_RUNNING;
-		m_PopulationSize = n;
-	}
-
-	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
-		FitnessFunc fitnessFunc, MutationFunc mutationFunc,
-		CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc)
-		: m_PopulationSize(popSize),      m_Blueprint(blueprint),
-		  m_FitnessFunc(fitnessFunc),     m_MutationFunc(mutationFunc),
-		  m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
-	{
-		// TODO: move this to Run
-		GeneratePopulation();
 	}
 
 	MutableGenotype Simulation::Construct()

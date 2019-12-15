@@ -22,22 +22,19 @@ namespace sga
 			FitnessFunc fitnessFunc, MutationFunc mutationFunc,
 			CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc);
 
+		//TODO: add acceptance criteria, return a Genotype
+		void Run();
+
 		// for debugging
 		Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc);
-
-		// Setters
-		void SetFitnessFunc(FitnessFunc func);
-		void SetMutationFunc(MutationFunc func);
-		void SetCrossoverFunc(CrossoverFunc func);
-		void SetRandomGenFunc(RandomGenFunc func);
-		void SetBlueprint(GenotypeBlueprint blueprint);
-		void SetPopulationSize(unsigned int n);
+		Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc, FitnessFunc fitnessFunc);
 
 	private:
-
 		MutableGenotype Construct();
 
 		void GeneratePopulation();
+
+		std::vector<float> CalcPopulationFitness();
 
 	private:
 		unsigned int m_PopulationSize;
