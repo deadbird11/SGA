@@ -113,13 +113,13 @@ namespace sga
 		std::vector<Genotype> result;
 
 		// slow version, will come up with faster one eventually
-		int totalCount = 0;
+		float totalCount = 0;
 		for (const float val : fitnesses)
 		{
-			totalCount += (int)(val * 100.0f);
+			totalCount += val;
 		}
 
-		int randomPick = detail::Random::GetRandomInRange<int>(0, totalCount);
+		float randomPick = detail::Random::GetRandomInRange<float>(0.0f, totalCount);
 		
 		// possible optimization with binary search, look at StackOverflow
 		unsigned int i = 0;
@@ -128,7 +128,7 @@ namespace sga
 			if (randomPick < fitnesses[i]) {
 				result.push_back(m_Population[i]);
 				totalCount -= fitnesses[i];
-				randomPick = detail::Random::GetRandomInRange<int>(0, totalCount);
+				randomPick = detail::Random::GetRandomInRange<float>(0.0f, totalCount);
 
 				fitnesses.erase(fitnesses.begin() + i);
 				m_Population.erase(m_Population.begin() + i);
