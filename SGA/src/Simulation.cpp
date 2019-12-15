@@ -5,6 +5,7 @@
 #include <cassert>
 #include <iostream>
 #include <algorithm>
+#include <random>
 
 #define ASSERT_NOT_RUNNING assert(!m_Running && "Cannot change this value while Simulation is running.")
 #define MAX_GENERATION 5
@@ -14,29 +15,28 @@ namespace sga
 {
 
 	Simulation::Simulation(unsigned int popSize, unsigned int matingPoolCount, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
-		: m_PopulationSize(popSize), m_MatingPoolCount(matingPoolCount), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
+		: m_MatingPoolCount(matingPoolCount), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
 	{
 		// TODO: move this to Run 
-		GeneratePopulation();
+		GeneratePopulation(popSize);
 	}
 
 	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc,
 						   FitnessFunc fitnessFunc)
-		: m_PopulationSize(popSize), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc), m_FitnessFunc(fitnessFunc)
+		: m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc), m_FitnessFunc(fitnessFunc)
 	{
 		// TODO: move this to Run 
-		GeneratePopulation();
+		GeneratePopulation(popSize);
 	}
 
 	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
-		FitnessFunc fitnessFunc, MutationFunc mutationFunc,
-		CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc)
-		: m_PopulationSize(popSize), m_Blueprint(blueprint),
-		m_FitnessFunc(fitnessFunc), m_MutationFunc(mutationFunc),
-		m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
+						   FitnessFunc fitnessFunc, MutationFunc mutationFunc,
+						   CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc)
+	: m_Blueprint(blueprint),	      m_FitnessFunc(fitnessFunc),	 m_MutationFunc(mutationFunc),
+	  m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
 	{
 		// TODO: move this to Run
-		GeneratePopulation();
+		GeneratePopulation(popSize);
 	}
 
 	// The method that holds the simulation
@@ -49,6 +49,11 @@ namespace sga
 		{
 			// calculating fitness
 			auto fitnesses = CalcPopulationFitness();
+
+			// TODO: Give different options, or just leave this up to the user,
+			//		 this could possibly turn into its own library that would be nice to have
+			std::vector<Genotype> elite = GetMatingPool();
+
 		}
 	}
 
@@ -61,7 +66,7 @@ namespace sga
 		// using this to output current best Genotype
 		unsigned int bestIndex;
 
-		for (unsigned int i = 0; i < m_PopulationSize; ++i)
+		for (unsigned int i = 0; i < m_Population.size(); ++i)
 		{
 			// User defined FitnessFunc
 			float fitness = m_FitnessFunc(m_Population[i]);
@@ -91,10 +96,10 @@ namespace sga
 	}
 
 
-	void Simulation::GeneratePopulation()
+	void Simulation::GeneratePopulation(unsigned int n)
 	{
 		m_Population = std::vector<Genotype>{};
-		for (unsigned int i = 0; i < m_PopulationSize; ++i)
+		for (unsigned int i = 0; i < n; ++i)
 		{
 			MutableGenotype blank = Construct();
 			m_RandomGenFunc(blank);
