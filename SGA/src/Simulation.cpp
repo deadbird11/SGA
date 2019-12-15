@@ -8,9 +8,10 @@
 #include <iostream>
 #include <algorithm>
 #include <random>
+#include <map>
 
 #define ASSERT_NOT_RUNNING assert(!m_Running && "Cannot change this value while Simulation is running.")
-#define MAX_GENERATION 5
+#define MAX_GENERATION 500
 
 
 namespace sga
@@ -55,13 +56,14 @@ namespace sga
 		// TODO: add acceptance criteria
 		for (unsigned int generation = 0; generation < MAX_GENERATION; ++generation)
 		{
+			std::cout << "Generation #" << generation + 1 << std::endl;
 			// calculating fitness
 			auto fitnesses = CalcPopulationFitness();
 
 			// TODO: Give different options, or just leave this up to the user,
 			//		 this could possibly turn into its own library that would be nice to have
 			// TODO!!: This should happen sooner than later, this is getting difficult to use already
-			std::vector<Genotype> elite = GetMatingPool(fitnesses);
+			std::vector<Genotype> elite = GetMatingPoolRandom(fitnesses);
 
 			m_Population = BreedGenotypes(elite);
 
@@ -106,18 +108,18 @@ namespace sga
 		return result;
 	}
 
-	std::vector<Genotype> Simulation::GetMatingPool(std::vector<float>& fitnesses)
+	std::vector<Genotype> Simulation::GetMatingPoolRandom(std::vector<float>& fitnesses)
 	{
 		std::vector<Genotype> result;
 
 		// slow version, will come up with faster one eventually
-		float totalCount = 0;
+		int totalCount = 0;
 		for (const float val : fitnesses)
 		{
-			totalCount += val;
+			totalCount += (int)(val * 100.0f);
 		}
 
-		int randomPick = detail::Random::GetRandomInRange<int>(0, static_cast<int>(totalCount));
+		int randomPick = detail::Random::GetRandomInRange<int>(0, totalCount);
 		
 		// possible optimization with binary search, look at StackOverflow
 		unsigned int i = 0;

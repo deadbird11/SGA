@@ -39,8 +39,9 @@ namespace sga
 
 		std::vector<float> CalcPopulationFitness();
 
-		// On hold until Random is done
-		std::vector<Genotype> GetMatingPool(std::vector<float>& fitnesses);
+		std::vector<Genotype> GetMatingPoolTopN(std::vector<float>& fitnesses);
+
+		std::vector<Genotype> GetMatingPoolRandom(std::vector<float>& fitnesses);
 
 		std::vector<Genotype> BreedGenotypes(std::vector<Genotype>& genotypes);
 
