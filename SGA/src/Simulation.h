@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <functional>
+#include <random>
 
 namespace sga
 {	
@@ -32,11 +33,15 @@ namespace sga
 	private:
 		MutableGenotype Construct();
 
-		void GeneratePopulation();
+		void GeneratePopulation(unsigned int n);
 
 		std::vector<float> CalcPopulationFitness();
 
+		// On hold until Random is done
+		std::vector<Genotype> GetMatingPool();
+
 	private:
+
 		unsigned int m_PopulationSize;
 		unsigned int m_MatingPoolCount;
 		std::vector<Genotype> m_Population;
@@ -52,5 +57,4 @@ namespace sga
 		bool m_Running = false;
 
 	};	
-
 }
