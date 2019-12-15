@@ -9,6 +9,7 @@ namespace sga
 	{
 		std::stringstream stream;
 
+		stream << "  ";
 		stream << "Boolean Genes:" << std::endl;
 		for (const BoolGene& boolGene : m_BoolGenes)
 		{
@@ -20,6 +21,7 @@ namespace sga
 			stream << std::endl;
 		}
 
+		stream << "  ";
 		stream << "Uint Genes:" << std::endl;
 		for (const UintGene& uintGene : m_UintGenes)
 		{
@@ -31,6 +33,7 @@ namespace sga
 			stream << std::endl;
 		}
 
+		stream << "  ";
 		stream << "Int Genes:" << std::endl;
 		for (const IntGene& intGene : m_IntGenes)
 		{
@@ -42,6 +45,7 @@ namespace sga
 			stream << std::endl;
 		}
 
+		stream << "  ";
 		stream << "Float Genes:" << std::endl;
 		for (const FloatGene& floatGene : m_FloatGenes)
 		{
