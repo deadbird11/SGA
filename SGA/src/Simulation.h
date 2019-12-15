@@ -6,6 +6,7 @@
 #include <vector>
 #include <functional>
 #include <random>
+#include <optional>
 
 namespace sga
 {	
@@ -32,6 +33,10 @@ namespace sga
 
 		static CrossoverFunc BasicCrossover;
 
+		void SetPolarization(unsigned int scl) { m_Polarization = scl; }
+
+		void SetOptimalFitness(float val) { m_OptimalFitness = std::make_optional(val); }
+
 	private:
 		MutableGenotype Construct();
 
@@ -39,25 +44,28 @@ namespace sga
 
 		std::vector<float> CalcPopulationFitness();
 
-		std::vector<Genotype> GetMatingPoolTopN(std::vector<float>& fitnesses);
+		// maybe make this an option for users
+		// std::vector<Genotype> GetMatingPoolTopN(std::vector<float>& fitnesses);
 
 		std::vector<Genotype> GetMatingPoolRandom(std::vector<float>& fitnesses);
 
 		std::vector<Genotype> BreedGenotypes(std::vector<Genotype>& genotypes);
-
+		
 	private:
 
 		unsigned int m_PopulationSize;
 		unsigned int m_MatingPoolCount;
 		float m_MutationChance;
+		unsigned int m_Polarization = 1;
+		std::optional<float> m_OptimalFitness;
 		std::vector<Genotype> m_Population;
 		Genotype* m_CurrentGenotype = nullptr;
 		GenotypeBlueprint m_Blueprint;
 
-		FitnessFunc m_FitnessFunc;
-		MutationFunc m_MutationFunc;
-		CrossoverFunc m_CrossoverFunc;
-		RandomGenFunc m_RandomGenFunc;
+		FitnessFunc		m_FitnessFunc;
+		MutationFunc	m_MutationFunc;
+		CrossoverFunc	m_CrossoverFunc;
+		RandomGenFunc	m_RandomGenFunc;
 
 		// To disable Setters
 		bool m_Running = false;

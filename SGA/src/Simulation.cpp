@@ -9,10 +9,10 @@
 #include <algorithm>
 #include <random>
 #include <map>
+#include <cmath>
 
 #define ASSERT_NOT_RUNNING assert(!m_Running && "Cannot change this value while Simulation is running.")
 #define MAX_GENERATION 500
-
 
 namespace sga
 {
@@ -53,10 +53,11 @@ namespace sga
 	{
 		m_Running = true;
 
+		unsigned int generation = 0;
 		// TODO: add acceptance criteria
-		for (unsigned int generation = 0; generation < MAX_GENERATION; ++generation)
+		while (m_Running)
 		{
-			std::cout << "Generation #" << generation + 1 << std::endl;
+			std::cout << "Generation #" << ++generation << std::endl;
 			// calculating fitness
 			auto fitnesses = CalcPopulationFitness();
 
@@ -76,6 +77,7 @@ namespace sga
 		// keeping track to normalize fitnesses
 		float min;
 		float max = 0;
+		float total = 0;
 		// using this to output current best Genotype
 		unsigned int bestIndex = 0;
 
@@ -84,6 +86,7 @@ namespace sga
 			// User defined FitnessFunc
 			float fitness = m_FitnessFunc(m_Population[i]);
 			result.push_back(fitness);
+			total += fitness;
 
 			if (i == 0 || fitness < min)
 				min = fitness;
@@ -95,15 +98,23 @@ namespace sga
 		}
 
 		// output best gene
-		std::cout << "Best Genotype of this generation with fitness (" << result[bestIndex] << "):" << std::endl;
+		std::cout << "Average fitness: (" << total / m_PopulationSize << ")" << std::endl;
+		std::cout << "Best Genotype of this generation with fitness (" << max << "):" << std::endl;
 		std::cout << m_Population[bestIndex].ToString() << std::endl;
 
+		if (m_OptimalFitness.has_value() && max >= m_OptimalFitness)
+		{
+			m_Running = false;
+			std::cout << "Has met fitness criteria." << std::endl;
+		}
+
 		// normalizing values between 0 and 1
-		std::for_each(std::begin(result), std::end(result),
-			[min, max](float& val)
+
+		for (float& val : result) 
 		{
 			val = (val - min) / (max - min);
-		});
+			val = std::pow(val, m_Polarization);
+		}
 
 		return result;
 	}
@@ -157,7 +168,7 @@ namespace sga
 		{
 			// random mating, haven't analyzed this very much yet
 			unsigned int upperRange = genotypes.size();
-			while (upperRange > 0)
+			while (upperRange > 1)
 			{
 				// random one to be bread
 				int randomIndex = detail::Random::GetRandomInRange<int>(0, upperRange-1);

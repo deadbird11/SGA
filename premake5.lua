@@ -8,7 +8,7 @@ workspace "SGA"
 
     project "SGA"
         kind "StaticLib"
-        language "C++"
+        language "C++17"
 
         location "SGA"
         
@@ -32,7 +32,7 @@ workspace "SGA"
 
     project "Sandbox"
         kind "ConsoleApp"
-        language "C++"
+        language "C++17"
         staticruntime "on"
         location "Sandbox"
 
