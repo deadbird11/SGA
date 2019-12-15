@@ -18,7 +18,7 @@ namespace sga
 			template<typename T>
 			static T GetRandomInRange(T a, T b)
 			{
-				static_assert(false, "detail::Random does not support this data type for ranges!");
+				static_assert(false, "detail::Random does not support this data type!");
 			}
 
 			template<>
