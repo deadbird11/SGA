@@ -26,7 +26,7 @@ namespace sga
 		void Run();
 
 		// for debugging
-		Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc);
+		Simulation(unsigned int popSize, unsigned int m_MatingPoolCount, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc);
 		Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc, FitnessFunc fitnessFunc);
 
 	private:
@@ -38,6 +38,7 @@ namespace sga
 
 	private:
 		unsigned int m_PopulationSize;
+		unsigned int m_MatingPoolCount;
 		std::vector<Genotype> m_Population;
 		Genotype* m_CurrentGenotype = nullptr;
 		GenotypeBlueprint m_Blueprint;

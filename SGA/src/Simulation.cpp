@@ -13,8 +13,8 @@
 namespace sga
 {
 
-	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
-		: m_PopulationSize(popSize), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
+	Simulation::Simulation(unsigned int popSize, unsigned int matingPoolCount, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
+		: m_PopulationSize(popSize), m_MatingPoolCount(matingPoolCount), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
 	{
 		// TODO: move this to Run 
 		GeneratePopulation();
@@ -39,6 +39,7 @@ namespace sga
 		GeneratePopulation();
 	}
 
+	// The method that holds the simulation
 	void Simulation::Run()
 	{
 		m_Running = true;
