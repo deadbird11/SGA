@@ -108,6 +108,7 @@ namespace sga
 		return result;
 	}
 
+	// choosing from population, with chance of getting chosen proportional to fitness
 	std::vector<Genotype> Simulation::GetMatingPoolRandom(std::vector<float>& fitnesses)
 	{
 		std::vector<Genotype> result;
@@ -126,13 +127,17 @@ namespace sga
 		while (result.size() < m_MatingPoolCount)
 		{
 			if (randomPick < fitnesses[i]) {
+				// this is our biasedly-picked Genotype
 				result.push_back(m_Population[i]);
+
+				// remove this genotype from the selection pool
 				totalCount -= fitnesses[i];
 				randomPick = detail::Random::GetRandomInRange<float>(0.0f, totalCount);
 
 				fitnesses.erase(fitnesses.begin() + i);
 				m_Population.erase(m_Population.begin() + i);
 
+				// starting over
 				i = 0;
 			}
 			randomPick -= fitnesses[i];
@@ -147,24 +152,32 @@ namespace sga
 		// TODO: This should only be if single mating event can happen
 		std::vector<Genotype> result{};
 
+		// building the next generation
 		while (result.size() < m_PopulationSize)
 		{
+			// random mating, haven't analyzed this very much yet
 			unsigned int upperRange = genotypes.size();
 			while (upperRange > 0)
 			{
+				// random one to be bread
 				int randomIndex = detail::Random::GetRandomInRange<int>(0, upperRange-1);
 
+				// moving random choice to the back with a swap
 				const Genotype& g1 = genotypes[randomIndex];
 				std::swap(genotypes[randomIndex], genotypes[upperRange - 1]);
 
+				// breeding last two in vector
 				MutableGenotype canvas = Construct();
 				m_CrossoverFunc(genotypes[upperRange - 1], genotypes[upperRange - 2], canvas);
 
+				// maybe mutating
 				float mutationPick = detail::Random::GetRandomInRange<float>(0, 1);
 				if (mutationPick < m_MutationChance) m_MutationFunc(canvas);
 
+				// new individual added to next generation
 				result.push_back(canvas.GetConstGenotype());
 
+				// not using already bred individuals
 				upperRange -= 2;
 
 			}
