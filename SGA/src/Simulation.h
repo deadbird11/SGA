@@ -19,31 +19,36 @@ namespace sga
 	{
 
 	public:
-		Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
-			FitnessFunc fitnessFunc, MutationFunc mutationFunc,
-			CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc);
+		Simulation(unsigned int popSize, unsigned int m_MatingPoolCount, float mutationChance,
+				   GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc,
+				   FitnessFunc fitnessFunc, CrossoverFunc crossoverFunc, MutationFunc mutationFunc);
 
 		//TODO: add acceptance criteria, return a Genotype
 		void Run();
 
 		// for debugging
-		Simulation(unsigned int popSize, unsigned int m_MatingPoolCount, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc);
-		Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc, FitnessFunc fitnessFunc);
+		Simulation(unsigned int popSize, unsigned int m_MatingPoolCount, float mutationChance, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc);
+		Simulation(unsigned int popSize, unsigned int m_MatingPoolCount, float mutationChance, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc, FitnessFunc fitnessFunc);
+
+		static CrossoverFunc BasicCrossover;
 
 	private:
 		MutableGenotype Construct();
 
-		void GeneratePopulation(unsigned int n);
+		void GeneratePopulation();
 
 		std::vector<float> CalcPopulationFitness();
 
 		// On hold until Random is done
-		std::vector<Genotype> GetMatingPool();
+		std::vector<Genotype> GetMatingPool(std::vector<float>& fitnesses);
+
+		std::vector<Genotype> BreedGenotypes(std::vector<Genotype>& genotypes);
 
 	private:
 
 		unsigned int m_PopulationSize;
 		unsigned int m_MatingPoolCount;
+		float m_MutationChance;
 		std::vector<Genotype> m_Population;
 		Genotype* m_CurrentGenotype = nullptr;
 		GenotypeBlueprint m_Blueprint;

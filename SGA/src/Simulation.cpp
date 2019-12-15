@@ -2,6 +2,8 @@
 
 #include "MutableGenotype.h"
 
+#include "detail/Random.h"
+
 #include <cassert>
 #include <iostream>
 #include <algorithm>
@@ -13,30 +15,36 @@
 
 namespace sga
 {
+	CrossoverFunc Simulation::BasicCrossover = [](const Genotype& first, const Genotype& second, MutableGenotype& canvas)
+	{
+		
+	};
 
-	Simulation::Simulation(unsigned int popSize, unsigned int matingPoolCount, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
-		: m_MatingPoolCount(matingPoolCount), m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
+	Simulation::Simulation(unsigned int popSize, unsigned int matingPoolCount, float mutationChance, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc)
+		: m_PopulationSize(popSize), m_MatingPoolCount(matingPoolCount), m_MutationChance(mutationChance),
+		  m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc)
 	{
 		// TODO: move this to Run 
-		GeneratePopulation(popSize);
+		GeneratePopulation();
 	}
 
-	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc,
+	Simulation::Simulation(unsigned int popSize, unsigned int matingPoolCount, float mutationChance, GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc,
 						   FitnessFunc fitnessFunc)
-		: m_Blueprint(blueprint), m_RandomGenFunc(randomGenFunc), m_FitnessFunc(fitnessFunc)
+		: m_PopulationSize(popSize), m_MatingPoolCount(matingPoolCount), m_MutationChance(mutationChance),
+		  m_Blueprint(blueprint),	 m_RandomGenFunc(randomGenFunc),	 m_FitnessFunc(fitnessFunc)
 	{
 		// TODO: move this to Run 
-		GeneratePopulation(popSize);
+		GeneratePopulation();
 	}
 
-	Simulation::Simulation(unsigned int popSize, GenotypeBlueprint blueprint,
-						   FitnessFunc fitnessFunc, MutationFunc mutationFunc,
-						   CrossoverFunc crossoverFunc, RandomGenFunc randomGenFunc)
-	: m_Blueprint(blueprint),	      m_FitnessFunc(fitnessFunc),	 m_MutationFunc(mutationFunc),
-	  m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
+	Simulation::Simulation(unsigned int popSize, unsigned int matingPoolCount, float mutationChance, 
+						   GenotypeBlueprint blueprint, RandomGenFunc randomGenFunc,
+						   FitnessFunc fitnessFunc, CrossoverFunc crossoverFunc, MutationFunc mutationFunc)
+	:	m_PopulationSize(popSize), m_MatingPoolCount(matingPoolCount), m_Blueprint(blueprint), m_FitnessFunc(fitnessFunc),
+		m_MutationChance(mutationChance), m_MutationFunc(mutationFunc),m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
 	{
 		// TODO: move this to Run
-		GeneratePopulation(popSize);
+		GeneratePopulation();
 	}
 
 	// The method that holds the simulation
@@ -52,7 +60,10 @@ namespace sga
 
 			// TODO: Give different options, or just leave this up to the user,
 			//		 this could possibly turn into its own library that would be nice to have
-			std::vector<Genotype> elite = GetMatingPool();
+			// TODO!!: This should happen sooner than later, this is getting difficult to use already
+			std::vector<Genotype> elite = GetMatingPool(fitnesses);
+
+			m_Population = BreedGenotypes(elite);
 
 		}
 	}
@@ -64,7 +75,7 @@ namespace sga
 		float min;
 		float max = 0;
 		// using this to output current best Genotype
-		unsigned int bestIndex;
+		unsigned int bestIndex = 0;
 
 		for (unsigned int i = 0; i < m_Population.size(); ++i)
 		{
@@ -82,7 +93,7 @@ namespace sga
 		}
 
 		// output best gene
-		std::cout << "Best Genotype of this generation:" << std::endl;
+		std::cout << "Best Genotype of this generation with fitness (" << result[bestIndex] << "):" << std::endl;
 		std::cout << m_Population[bestIndex].ToString() << std::endl;
 
 		// normalizing values between 0 and 1
@@ -95,16 +106,85 @@ namespace sga
 		return result;
 	}
 
+	std::vector<Genotype> Simulation::GetMatingPool(std::vector<float>& fitnesses)
+	{
+		std::vector<Genotype> result;
 
-	void Simulation::GeneratePopulation(unsigned int n)
+		// slow version, will come up with faster one eventually
+		float totalCount = 0;
+		for (const float val : fitnesses)
+		{
+			totalCount += val;
+		}
+
+		int randomPick = detail::Random::GetRandomInRange<int>(0, static_cast<int>(totalCount));
+		
+		// possible optimization with binary search, look at StackOverflow
+		unsigned int i = 0;
+		while (result.size() < m_MatingPoolCount)
+		{
+			if (randomPick < fitnesses[i]) {
+				result.push_back(m_Population[i]);
+				totalCount -= fitnesses[i];
+				randomPick = detail::Random::GetRandomInRange<int>(0, totalCount);
+
+				fitnesses.erase(fitnesses.begin() + i);
+				m_Population.erase(m_Population.begin() + i);
+
+				i = 0;
+			}
+			randomPick -= fitnesses[i];
+			++i;
+		}
+
+		return result;
+	}
+
+	std::vector<Genotype> Simulation::BreedGenotypes(std::vector<Genotype>& genotypes)
+	{
+		// TODO: This should only be if single mating event can happen
+		std::vector<Genotype> result{};
+
+		while (result.size() < m_PopulationSize)
+		{
+			unsigned int upperRange = genotypes.size();
+			while (upperRange > 0)
+			{
+				int randomIndex = detail::Random::GetRandomInRange<int>(0, upperRange-1);
+
+				const Genotype& g1 = genotypes[randomIndex];
+				std::swap(genotypes[randomIndex], genotypes[upperRange - 1]);
+
+				MutableGenotype canvas = Construct();
+				m_CrossoverFunc(genotypes[upperRange - 1], genotypes[upperRange - 2], canvas);
+
+				float mutationPick = detail::Random::GetRandomInRange<float>(0, 1);
+				if (mutationPick < m_MutationChance) m_MutationFunc(canvas);
+
+				result.push_back(canvas.GetConstGenotype());
+
+				upperRange -= 2;
+
+			}
+		}
+		// shaving off extras
+		while (result.size() > m_PopulationSize)
+		{
+			result.pop_back();
+		}
+
+		return result;
+	}
+
+	void Simulation::GeneratePopulation()
 	{
 		m_Population = std::vector<Genotype>{};
-		for (unsigned int i = 0; i < n; ++i)
+		for (unsigned int i = 0; i < m_PopulationSize; ++i)
 		{
-			MutableGenotype blank = Construct();
-			m_RandomGenFunc(blank);
+			MutableGenotype canvas = Construct();
+			m_RandomGenFunc(canvas);
 			// Population consists of const Genotypes
-			m_Population.push_back(blank.GetConstGenotype());
+			m_Population.push_back(canvas.GetConstGenotype());
 		}
 	}
 

@@ -114,6 +114,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\detail\Random.h" />
     <ClInclude Include="src\Genotype.h" />
     <ClInclude Include="src\MutableGenotype.h" />
     <ClInclude Include="src\sga.h" />
@@ -121,6 +122,7 @@
     <ClInclude Include="src\Types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\detail\Random.cpp" />
     <ClCompile Include="src\Genotype.cpp" />
     <ClCompile Include="src\MutableGenotype.cpp" />
     <ClCompile Include="src\sga.cpp" />
