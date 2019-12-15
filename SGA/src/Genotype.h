@@ -2,6 +2,8 @@
 
 #include "Types.h"
 
+#include <string>
+
 namespace sga
 {
 	
@@ -38,6 +40,8 @@ namespace sga
 		{
 			return m_FloatGenes[id];
 		}
+
+		std::string ToString() const;
 
 	protected:
 
