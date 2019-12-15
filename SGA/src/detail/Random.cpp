@@ -1,9 +1,11 @@
 #include "Random.h"
+#include <time.h>
 
 namespace sga
 {
 	namespace detail
 	{
-		std::default_random_engine Random::s_Engine;
+		std::random_device Random::s_Device;
+		std::mt19937 Random::s_Engine(Random::s_Device());
 	}
 }

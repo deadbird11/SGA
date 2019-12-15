@@ -12,7 +12,8 @@ namespace sga
 		friend class Simulation;
 		public:
 		private:
-			static std::default_random_engine s_Engine;
+			static std::random_device s_Device;
+			static std::mt19937 s_Engine;
 
 			template<typename T>
 			static T GetRandomInRange(T a, T b)
