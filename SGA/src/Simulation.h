@@ -23,6 +23,9 @@ namespace sga
 	using RandomGenFunc = std::function<T()>;
 
 	template<typename T>
+	using ToStringFunc = std::function<std::string(const T&)>;
+
+	template<typename T>
 	class Simulation
 	{
 	private:
@@ -38,6 +41,7 @@ namespace sga
 		MutationFunc<T>		m_MutationFunc;
 		CrossoverFunc<T>	m_CrossoverFunc;
 		RandomGenFunc<T>	m_RandomGenFunc;
+		ToStringFunc<T>		m_ToStringFunc;
 
 		// To disable Setters
 		bool m_Running = false;
@@ -79,6 +83,8 @@ namespace sga
 
 		void SetOptimalFitness(float val) { m_OptimalFitness = std::make_optional(val); }
 
+		void SetToString(ToStringFunc<T> func) { m_ToStringFunc = func; }
+
 	private:
 
 		void GeneratePopulation()
@@ -119,8 +125,10 @@ namespace sga
 			// output best gene
 			std::cout << "Average fitness: (" << total / m_PopulationSize << ")" << std::endl;
 			std::cout << "Best Genotype of this generation has fitness (" << max << "):" << std::endl;
-			//std::cout << m_Population[bestIndex].ToString() << std::endl;
-
+			if (m_ToStringFunc)
+			{
+				std::cout << m_ToStringFunc(m_Population[bestIndex]) << std::endl;
+			}
 			if (m_OptimalFitness.has_value() && max >= m_OptimalFitness)
 			{
 				m_Running = false;
