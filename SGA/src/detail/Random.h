@@ -4,14 +4,22 @@
 
 namespace sga
 {
+
+	template<typename T>
+	class Simulation;
 	namespace detail
 	{
 		// I want to expand on this eventually
 		class Random
 		{
-		friend class Simulation;
+			template<typename T>
+			friend class Simulation;
 		public:
 		private:
+
+			template<typename T>
+			friend class Simulation;
+
 			static std::random_device s_Device;
 			static std::mt19937 s_Engine;
 

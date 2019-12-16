@@ -127,7 +127,6 @@
     <ClCompile Include="src\Genotype.cpp" />
     <ClCompile Include="src\MutableGenotype.cpp" />
     <ClCompile Include="src\sga.cpp" />
-    <ClCompile Include="src\Simulation.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
