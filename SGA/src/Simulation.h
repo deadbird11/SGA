@@ -52,14 +52,14 @@ namespace sga
 			: m_PopulationSize(popSize), m_MatingPoolCount(matingPoolCount), m_FitnessFunc(fitnessFunc), m_MutationChance(mutationChance),
 			m_MutationFunc(mutationFunc), m_CrossoverFunc(crossoverFunc), m_RandomGenFunc(randomGenFunc)
 		{
-			// TODO: move this to Run
-			GeneratePopulation();
 		}
 
 		//TODO: add acceptance criteria, return a Genotype
 		void Run()
 		{
 			m_Running = true;
+
+			GeneratePopulation();
 
 			unsigned int generation = 0;
 			// TODO: add acceptance criteria
