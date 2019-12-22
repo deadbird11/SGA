@@ -90,15 +90,17 @@ namespace sga
 		void GeneratePopulation()
 		{
 			m_Population = std::vector<T>{};
+			m_Population.reserve(m_PopulationSize);
 			for (unsigned int i = 0; i < m_PopulationSize; ++i)
 			{
-				m_Population.push_back(m_RandomGenFunc());
+				m_Population.emplace_back(m_RandomGenFunc());
 			}
 		}
 
 		std::vector<float> CalcPopulationFitness(bool printResults)
 		{
 			std::vector<float> result{};
+			result.reserve(m_PopulationSize);
 			// keeping track to normalize fitnesses
 			float min;
 			float max = 0;
@@ -110,7 +112,7 @@ namespace sga
 			{
 				// User defined FitnessFunc
 				float fitness = m_FitnessFunc(m_Population[i]);
-				result.push_back(fitness);
+				result.emplace_back(fitness);
 				total += fitness;
 
 				if (i == 0 || fitness < min)
@@ -158,6 +160,7 @@ namespace sga
 		std::vector<T> GetMatingPoolRandom(std::vector<float>& fitnesses)
 		{
 			std::vector<T> result;
+			result.reserve(m_MatingPoolCount);
 
 			// slow version, will come up with faster one eventually
 			float totalCount = 0;
@@ -174,7 +177,7 @@ namespace sga
 			{
 				if (randomPick < fitnesses[i]) {
 					// this is our biasedly-picked Genotype
-					result.push_back(m_Population[i]);
+					result.emplace_back(m_Population[i]);
 
 					// remove this genotype from the selection pool
 					totalCount -= fitnesses[i];
@@ -197,6 +200,7 @@ namespace sga
 		{
 			// TODO: This should only be if single mating event can happen
 			std::vector<T> result{};
+			result.reserve(m_PopulationSize);
 
 			// building the next generation
 			while (result.size() < m_PopulationSize)
@@ -220,7 +224,7 @@ namespace sga
 					if (mutationPick < m_MutationChance) m_MutationFunc(canvas);
 
 					// new individual added to next generation
-					result.push_back(canvas);
+					result.emplace_back(canvas);
 
 					// not using already bred individuals
 					upperRange -= 2;
