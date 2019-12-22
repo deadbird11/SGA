@@ -67,7 +67,7 @@ namespace sga
 			{
 				std::cout << "Generation #" << ++generation << std::endl;
 				// calculating fitness
-				auto fitnesses = CalcPopulationFitness();
+				auto fitnesses = CalcPopulationFitness(true);
 
 				// TODO: Give different options, or just leave this up to the user,
 				//		 this could possibly turn into its own library that would be nice to have
@@ -96,7 +96,7 @@ namespace sga
 			}
 		}
 
-		std::vector<float> CalcPopulationFitness()
+		std::vector<float> CalcPopulationFitness(bool printResults)
 		{
 			std::vector<float> result{};
 			// keeping track to normalize fitnesses
@@ -122,18 +122,24 @@ namespace sga
 				}
 			}
 
-			// output best gene
-			std::cout << "Average fitness: (" << total / m_PopulationSize << ")" << std::endl;
-			std::cout << "Best Genotype of this generation has fitness (" << max << "):" << std::endl;
-			if (m_ToStringFunc)
+			if (printResults)
 			{
-				std::cout << m_ToStringFunc(m_Population[bestIndex]) << std::endl;
+				// output best gene
+				std::cout << "Average fitness: (" << total / m_PopulationSize << ")" << std::endl;
+				std::cout << "Best Genotype of this generation has fitness (" << max << "):" << std::endl;
+				if (m_ToStringFunc)
+				{
+					std::cout << m_ToStringFunc(m_Population[bestIndex]) << std::endl;
+				}
 			}
+
+			// checking end criterion
 			if (m_OptimalFitness.has_value() && max >= m_OptimalFitness)
 			{
 				m_Running = false;
 				std::cout << "Has met fitness criteria." << std::endl;
 			}
+
 
 			// normalizing values between 0 and 1
 
