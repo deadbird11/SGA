@@ -54,7 +54,6 @@ namespace sga
 		{
 		}
 
-		//TODO: add acceptance criteria, return a Genotype
 		void Run()
 		{
 			m_Running = true;
@@ -62,15 +61,15 @@ namespace sga
 			GeneratePopulation();
 
 			unsigned int generation = 0;
-			// TODO: add acceptance criteria
+			// TODO: add more in depth acceptance criteria
 			while (m_Running)
 			{
 				std::cout << "Generation #" << ++generation << std::endl;
 				// calculating fitness
 				auto fitnesses = CalcPopulationFitness(true);
 
-				// TODO: Give different options, or just leave this up to the user,
-				//		 this could possibly turn into its own library that would be nice to have
+				// TODO:   Give different options, or just leave this up to the user,
+				//		   this could possibly turn into its own library that would be nice to have
 				// TODO!!: This should happen sooner than later, this is getting difficult to use already
 				std::vector<T> elite = GetMatingPoolRandom(fitnesses);
 
